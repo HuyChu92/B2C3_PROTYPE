@@ -92,7 +92,7 @@ class Start(tk.Frame):
         try:
             excel_filename = r"{}".format(file_path)
             if extension == '.xlsx':
-                df = pd.read_excel(excel_filename,self.variable.get())
+                df = pd.read_excel(excel_filename,self.variable.get(),engine='openpyxl')
             else:
                 df = pd.read_csv(excel_filename)
             self.path = df
