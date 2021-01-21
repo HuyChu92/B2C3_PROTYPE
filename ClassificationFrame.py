@@ -35,7 +35,6 @@ class Classification(tk.Frame):
         self.train = '60%'
         self.scaling = 'Standaardiseer'
         
-    
         canvas = tk.Canvas(self, height=self.height, width=self.width)
         canvas.pack()
 
@@ -103,16 +102,23 @@ class Classification(tk.Frame):
         button_geavanceerd.place(rely=0.3, relx=0.1)
 
     def train_button(self):
+        """ Verwijdert NaN values uit dataframe en maakt een object(Bestmodel) aan
+            waarbij het beste model word gegenereerd op basis van de ingevoerde variabelen
+        """
         self.df.dropna(how='any')
         self.df.dropna(how='any',inplace= True)
         self.best_model = Bestmodel(self,self.k)
         self.best_model.laad_model()
 
     def show_colums(self, box, dataframe):
+        """ Weergeeft de column
+        """
         for clm in dataframe.columns:
             box.insert(END, clm)
     
     def add_independent_var(self, columns):
+        """ Voegt de geselecteerde variabel toe aan self.X
+        """
         waarde = self.list_columns.get(self.list_columns.curselection())
         if waarde == self.y:
             return messagebox.showwarning("Warning", "Variabel is als dependent variabel gekozen!")
@@ -125,12 +131,16 @@ class Classification(tk.Frame):
         return None
 
     def remove_independent_var(self):
+        """ Verwijdert geselecteerd variabel uit self.X
+        """
         waarde = self.list_independent.get(self.list_independent.curselection())
         self.X.remove(waarde)
         self.list_independent.delete(0, END)
         self.show_colums(self.list_independent,self.df[self.X])
 
     def get_categorical_columns(self):
+        """ Selecteert de categorische columns uit df 
+        """
         category_features = []
         threshold = 4
         for each in self.df.columns:
@@ -141,12 +151,16 @@ class Classification(tk.Frame):
         return category_features
 
     def choose_dependent_val(self, dependent):
+        """ Stel de dependent variabel in
+        """
         if dependent in self.X:
             return messagebox.showwarning("Warning", "Gekozen y variable zit al in de predictors!")
         self.y = dependent
         return messagebox.showinfo("Gelukt", "'{}' als dependent variabel gekozen".format(dependent))
 
     def clear(self):
+        """ Wis het het huidige model en zet alle parameters terug naar hun beginwaardes
+        """
         self.huidig_model = None
         self.X = []
         self.y = None

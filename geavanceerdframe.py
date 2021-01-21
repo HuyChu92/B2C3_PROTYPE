@@ -10,6 +10,8 @@ class Geavanceerd:
         self.root = root
 
     def geavanceerd_venster(self):
+        """ Toont het geavanceerde venster
+        """
         window = Toplevel(self.root)
         window.title('Geavanceerde instellingen')
         resizable = window.resizable(False,False)
@@ -67,17 +69,23 @@ class Geavanceerd:
         button_logistic_ok.place(relx=0.8,rely=0.8)
     
     def apply_process_parameter(self,train,scaling):
+        """ Past de train % en type scaling aan op basis van input gebruiker
+        """
         self.root.train = train
         self.root.scaling = scaling
         print(self.root.train,self.root.scaling)
         return messagebox.showinfo('Gelukt','Parameters datapreprocessing aangepast')
 
     def apply_threshold_k(self,k):
+        """ Past de K threshold aan o.b.v. input gebruiker
+        """
         self.root.k = int(k)
         print(self.root.k)
         return messagebox.showinfo('Gelukt','Threshold K aangepast')
 
     def apply_cutoff(self,value):
+        """ Past de cutoff value aan op basis van input gebruiker
+        """
         self.root.cutoff = float(value)
         print(self.root.cutoff)
         return messagebox.showinfo('Gelukt','Cutoff value aangepast')

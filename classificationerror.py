@@ -33,6 +33,8 @@ class ErrorClassification:
     #     return 'Accuracy: {}%\nError: {}%\nprecision: {}%\nrecall: {}%\nfscore: {}'.format(accuracy,error,precision,recall,f1)
 
     def show_accuracy(self):
+        """ Geeft de accuracy terug
+        """
         # accuracy = round((accuracy_score(self.actual, self.predicted) * 100),2)
         # return str(accuracy)+'%'
         return round(accuracy_score(self.actual, self.predicted),2)

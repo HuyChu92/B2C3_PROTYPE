@@ -32,6 +32,8 @@ class Bestmodel:
 
 
     def best_model_frame(self):
+        """ Summary venster zien
+        """
         window = Toplevel(self.root)
         resizable = window.resizable(False,False)
         window.geometry("400x500")
@@ -56,6 +58,8 @@ class Bestmodel:
         laad_button.place(relx=0.8,rely=0)
     
     def model_laden(self,tree,venster):
+        """ Laad een model in
+        """
         curItem = tree.focus()
         lijst = tree.item(curItem)
         if lijst['values'][0] == 'KNN':
@@ -72,7 +76,7 @@ class Bestmodel:
         venster.destroy()
         
     def generate_best_knn(self):
-        """ Maak 1 functie om 3 modellen te genereren
+        """ Geneert het beste model o.b.v. de K threshold. 
         """
         lijst_knn = []
         for num in range(1,self.root.k+1):
@@ -90,16 +94,22 @@ class Bestmodel:
         return best
 
     def generate_logistic_model(self):
+        """ Genereert logistic regression model
+        """
         model = Model(1,'Logistic Regression','60%',self.root.df,self.root.X,self.root.y,self.root.scaling)
         model.maak_model()
         return model
 
     def generate_decisiontree_model(self):
+        """ Genereet best decision  classification tree model
+        """
         model = Model(1,'Decision Tree','60%',self.root.df,self.root.X,self.root.y,self.root.scaling)
         model.maak_model()
         return model
 
     def show_best_models(self,window):
+        """ Laat alle beste modellen binnen classification zien
+        """
         model_name = []
         accuracy = []
 

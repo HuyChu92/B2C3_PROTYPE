@@ -12,7 +12,7 @@ from ClassificationFrame import Classification
 import os
 
 class Start(tk.Frame):
-    """
+    """ Startframe
     """
     def __init__(self, master, **kwargs):
         tk.Frame.__init__(self, master, **kwargs)
@@ -63,6 +63,8 @@ class Start(tk.Frame):
         self.variable = StringVar(self.file_frame)
         
     def Bestand_dialog(self):
+        """ Opent een venster waarbij de gebruiker een bestand kan selecteren
+        """
         filename = filedialog.askopenfilename(initialdir="/",
                                           title="Selecteer een bestand",
                                           filetype=(("xlsx files", "*xlsx"),("csv files", "*csv"),("All files","*.*")))
@@ -83,6 +85,8 @@ class Start(tk.Frame):
         # print(self.master.path)
 
     def Laad_excel_data(self):
+        """ Laad het geselecteerde bestand en weergeeft de columns en records
+        """
         file_path = self.label_file["text"]
         name, extension = os.path.splitext(file_path)
         try:
@@ -116,6 +120,8 @@ class Start(tk.Frame):
         return None
 
     def verwijder_data(self):
+        """ Verwijdert de huidige weergave van columns en records
+        """
         self.tv1.delete(*self.tv1.get_children())
     
    
