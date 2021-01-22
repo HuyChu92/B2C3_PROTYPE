@@ -9,6 +9,7 @@ import numpy
 import xlrd as xl
 import openpyxl as ox
 from ClassificationFrame import Classification
+from RegressionFrame import Regression
 import os
 
 class Start(tk.Frame):
@@ -42,8 +43,10 @@ class Start(tk.Frame):
                                 else self.master.change(Classification))
         button_knn.place(rely=0.1, relx=0.1)
 
-        button_logistic = tk.Button(self.tool_frame, text="Logistic Regression",command=lambda : messagebox.showwarning('Waarschuwing', 'Deze functie is nog niet beschikbaar'))
-        button_logistic.place(rely=0.2, relx=0.1)
+        button_regression = tk.Button(self.tool_frame, text="Regression",
+                                        command=lambda :messagebox.showerror("Waarschuwing","Open eerst een bestand!") if len(self.master.path) == None
+                                        else self.master.change(Regression))
+        button_regression.place(rely=0.2, relx=0.1)
 
         button_tree = tk.Button(self.tool_frame, text="Classification Trees",command=lambda : messagebox.showwarning('Waarschuwing', 'Deze functie is nog niet beschikbaar') )
         button_tree.place(rely=0.3, relx=0.1)
@@ -92,7 +95,7 @@ class Start(tk.Frame):
         try:
             excel_filename = r"{}".format(file_path)
             if extension == '.xlsx':
-                df = pd.read_excel(excel_filename,self.variable.get(),engine='openpyxl')
+                df = pd.read_excel(excel_filename,self.variable.get())
             else:
                 df = pd.read_csv(excel_filename)
             self.path = df

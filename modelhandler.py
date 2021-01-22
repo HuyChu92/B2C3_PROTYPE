@@ -1,19 +1,22 @@
 import pandas as pd
 import numpy as np
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.linear_model import LogisticRegression
+from sklearn.neighbors import KNeighborsClassifier, KNeighborsRegressor
+from sklearn.linear_model import LogisticRegression, LinearRegression
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix, accuracy_score
 from sklearn import tree
+from sklearn.tree import DecisionTreeRegressor
 import matplotlib.pyplot as plt
 from classificationerror import  ErrorClassification
+from regressionerror import ErrorRegression
 from sklearn.preprocessing import StandardScaler, MinMaxScaler
 
 class Model:
     """ Class model
     """
-    def __init__(self,id,naam,train_percentage,df,X,y,scaling):
+    def __init__(self,id,naam,train_percentage,df,X,y,scaling,soort):
         self.id = id
+        self.soort = soort
         self.naam = naam
         self.model = None
         self.df = df
@@ -30,9 +33,12 @@ class Model:
         self.error_test = None
     
     def show_summary_label(self):
-        """ Laat het de naam, accuracy en type scaling zien
+        """ Laat het de naam, accuracy, r2 en type scaling zien op basis van type voorspelling
         """
-        label = "Model: {}\nAccuracy: {}\nScaling: {}".format(self.naam,str(self.error_test.accuracy),self.scaling)
+        if self.soort == 'Classification':
+            label = "Model: {}\nAccuracy: {}\nScaling: {}".format(self.naam,str(self.error_test.accuracy),self.scaling)
+        else:
+            label = "Model: {}\nR2: {}\nScaling: {}".format(self.naam,str(self.error_test.r2),self.scaling)
         return label
         
     def split_data(self):
@@ -50,20 +56,32 @@ class Model:
         """ Maakt een model aan op basis van meegegeven techniek
         """
         self.split_data()
-        if self.naam == 'KNN':
+        if self.naam == 'KNN Classification':
             self.model = KNeighborsClassifier(n_neighbors=k)
+        elif self.naam == 'KNN Regression':
+            self.model = KNeighborsRegressor(n_neighbors=k)
         elif self.naam == 'Logistic Regression':
             self.model = LogisticRegression()
+        elif self.naam == 'MLR':
+            self.model = LinearRegression()
+        elif self.naam == 'Decision Tree Regression':
+            self.model = DecisionTreeRegressor()
         else:
             self.model = tree.DecisionTreeClassifier()
 
         self.model.fit(self.X_train, self.y_train)
 
-        pred_train = self.model.predict(self.X_train)
-        self.error_train = ErrorClassification(self.y_train,pred_train)
-        # print(pred_train)
-        pred_test = self.model.predict(self.X_test)
-        self.error_test = ErrorClassification(self.y_test,pred_test)
+        if self.soort == 'Classification':
+            pred_train = self.model.predict(self.X_train)
+            self.error_train = ErrorClassification(self.y_train,pred_train)
+            pred_test = self.model.predict(self.X_test)
+            self.error_test = ErrorClassification(self.y_test,pred_test)
+        else:
+            pred_train = self.model.predict(self.X_train)
+            self.error_train = ErrorRegression(self.y_train,pred_train)
+            pred_test = self.model.predict(self.X_test)
+            self.error_test = ErrorRegression(self.y_test,pred_test)
+
     
     def voorspel_uitkomst(self,waardes):
         """ Predict een uitkomst op basis van ingevoerde waardes

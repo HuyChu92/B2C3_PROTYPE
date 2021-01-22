@@ -20,6 +20,7 @@ class Classification(tk.Frame):
     """
     def __init__(self, master, **kwargs):
         tk.Frame.__init__(self, master, **kwargs)
+        self.name = 'Classification'
         self.width = 800
         self.height = 600
         self.file = self.master.file
@@ -108,7 +109,7 @@ class Classification(tk.Frame):
         self.df.dropna(how='any')
         self.df.dropna(how='any',inplace= True)
         self.best_model = Bestmodel(self,self.k)
-        self.best_model.laad_model()
+        self.best_model.laad_model_classification()
 
     def show_colums(self, box, dataframe):
         """ Weergeeft de column
