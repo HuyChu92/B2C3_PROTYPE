@@ -170,7 +170,11 @@ class Regression(tk.Frame):
         self.y = None
         self.best_model = None
         self.voorspel = None
-        self.k = 5
+        self.geavanceerd = Geavanceerd(self)
+        self.k = 10
+        self.cutoff = 0.5
+        self.train = '60%'
+        self.scaling = 'Geen Scaling'
         self.list_independent.delete(0,'end')
         self.label_parameter.config(text='')
 

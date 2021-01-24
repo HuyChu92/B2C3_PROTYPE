@@ -39,10 +39,10 @@ class Bestmodel:
         """
         window = Toplevel(self.root)
         resizable = window.resizable(False,False)
-        window.geometry("400x500")
+        window.geometry("600x500")
 
         best_model_label = tk.LabelFrame(window)
-        best_model_label.place(height=400, width=400, rely=0, relx=0)
+        best_model_label.place(height=400, width=600, rely=0, relx=0)
 
         tv1 = ttk.Treeview(best_model_label)
         tv1.place(relheight=1, relwidth=1)
@@ -57,13 +57,41 @@ class Bestmodel:
         else:
             self.show_best_models_regression(tv1)
         
-        
-        select_best_model = tk.LabelFrame(window,text='Selecteer een model en laad deze in')
-        select_best_model.place(height=100, width=400, rely=0.8, relx=0)
+        select_best_model = tk.LabelFrame(window,text='Selecteer een model en laad deze in of bekijk een uitgebreide summary van het geselecteerde model')
+        select_best_model.place(height=100, width=600, rely=0.8, relx=0)
 
         laad_button = Button(select_best_model,text='Laad model',command=lambda: self.model_laden(tv1,window))
-        laad_button.place(relx=0.8,rely=0)
+        laad_button.place(relx=0.9,rely=0)
+
+        extensive_summary = Button(select_best_model,text='Extensive Summary',command=lambda: self.extensive_summary_model(tv1))
+        extensive_summary.place(relx=0,rely=0)
     
+    def extensive_summary_model(self,tree):
+        curItem = tree.focus()
+        lijst = tree.item(curItem)
+        if lijst['values'][0] == 'KNN Classification':
+            self.best_knn_classification.show_extensive_summary()
+        elif lijst['values'][0] == 'KNN Regression':
+            self.best_knn_regression.show_extensive_summary()
+        elif lijst['values'][0] == 'MLR':
+            self.best_mlr.show_extensive_summary()
+        elif lijst['values'][0] == 'Logistic Regression':
+            self.best_logistic.show_extensive_summary()
+        elif lijst['values'][0] == 'Decision Tree Regression':
+            self.best_decisiontree_regr.show_extensive_summary()
+        else:
+            self.best_knn_classification.show_extensive_summary()
+        # curItem = tree.focus()
+        # lijst = tree.item(curItem)
+        # if lijst['values'][0] == 'KNN Classification':
+        #     self.best_knn_classification.show_extensive_summary()
+        
+        # elif lijst['values'][0] == 'Logistic Regression':
+        #     self.best_logistic.show_extensive_summary()
+        # else:
+        #     self.best_decisiontree_class.show_extensive_summary()
+
+
     def model_laden(self,tree,venster):
         """ Laad een model in
         """
@@ -94,6 +122,8 @@ class Bestmodel:
     def generate_best_knn_classification(self):
         """ Geneert het beste model o.b.v. de K threshold. 
         """
+        if self.root.name == 'Regression':
+            return None
         lijst_knn = []
         for num in range(1,self.root.k+1):
             model = Model(num,'KNN Classification',self.root.train,self.root.df,self.root.X,self.root.y,self.root.scaling,'Classification')
@@ -112,6 +142,8 @@ class Bestmodel:
     def generate_best_knn_regression(self):
         """ Geneert het beste model o.b.v. de K threshold. 
         """
+        if self.root.name == 'Classification':
+            return None
         lijst_knn = []
         for num in range(1,self.root.k+1):
             model = Model(num,'KNN Regression',self.root.train,self.root.df,self.root.X,self.root.y,self.root.scaling,'Regression')
@@ -124,12 +156,15 @@ class Bestmodel:
             if model.error_test.r2 > r2:
                 r2 = model.error_test.r2
                 best = model
-        print(best.X)
+                # print(best.naam)
+        # print(best.X)
         return best
 
     def generate_logistic_model(self):
         """ Genereert logistic regression model
         """
+        if self.root.name == 'Regression':
+            return None
         model = Model(1,'Logistic Regression',self.root.train,self.root.df,self.root.X,self.root.y,self.root.scaling,'Classification')
         model.maak_model()
         return model
@@ -137,25 +172,52 @@ class Bestmodel:
     def generate_mlr_model(self):
         """ Genereert MLR model 
         """ 
+        if self.root.name == 'Classification':
+            return None
         model = Model(1,'MLR',self.root.train,self.root.df,self.root.X,self.root.y,self.root.scaling,'Regression')
         model.maak_model()
         return model
 
     def generate_decisiontreeClassification(self):
-        """ Genereet best decision  classification tree model
+        """ Selecteer het beste decision tree regression model op 
+            basis van de 'max leaves nodes' en accuracy score
         """
-        model = Model(1,'Decision Tree Classification',self.root.train,self.root.df,self.root.X,self.root.y,self.root.scaling,'Classification')
-        model.maak_model()
-        return model
+        if self.root.name == 'Regression':
+            return None
+        lijst_dtr = []
+        for num in range(2,100):
+            model = Model(num,'Decision Tree Classification',self.root.train,self.root.df,self.root.X,self.root.y,self.root.scaling,'Classification')
+            model.maak_model(num)
+            lijst_dtr.append(model)
+
+        acc = 0
+        best = None
+        for model in lijst_dtr:
+            if model.error_test.accuracy > acc:
+                acc = model.error_test.accuracy
+                best = model
+        return best
 
     def generate_decisiontreeRegression(self):
-        """ Genereet best decision  classification tree model
+        """ Selecteer het beste decision tree regression model op 
+            basis van de 'max leaves nodes' en rmse score
         """
-        model = Model(1,'Decision Tree Regression',self.root.train,self.root.df,self.root.X,self.root.y,self.root.scaling,'Regression')
-        model.maak_model()
-        n_nodes = model.model.tree_.node_count
-        print(n_nodes)
-        return model
+        if self.root.name == 'Classification':
+            return None
+        lijst_dtr = []
+        for num in range(2,100):
+            model = Model(num,'Decision Tree Regression',self.root.train,self.root.df,self.root.X,self.root.y,self.root.scaling,'Regression')
+            model.maak_model(num)
+            lijst_dtr.append(model)
+
+        rmse = 100000
+        best = None
+        for model in lijst_dtr:
+            if model.error_test.rmse < rmse:
+                rmse = model.error_test.rmse
+                best = model
+        return best
+  
 
     def show_best_models_classification(self,window):
         """ Laat alle beste modellen binnen classification zien
@@ -186,16 +248,20 @@ class Bestmodel:
         """
         model_name = []
         r2 = []
-
+        rmse = []
         r2.append(self.best_knn_regression.error_test.r2)
         r2.append(self.best_mlr.error_test.r2)
         r2.append(self.best_decisiontree_regr.error_test.r2)
+
+        rmse.append(self.best_knn_regression.error_test.rmse)
+        rmse.append(self.best_mlr.error_test.rmse)
+        rmse.append(self.best_decisiontree_regr.error_test.rmse)
 
         model_name.append(self.best_knn_regression.naam)
         model_name.append(self.best_mlr.naam)
         model_name.append(self.best_decisiontree_regr.naam)
 
-        df = pd.DataFrame(list(zip(model_name, r2)), columns =['Model', 'r2']) 
+        df = pd.DataFrame(list(zip(model_name,rmse,r2)), columns =['Model','RMSE', 'R2']) 
         window["column"] = list(df.columns)
         window["show"] = "headings"
         for column in window["columns"]:
@@ -221,11 +287,11 @@ class Bestmodel:
 
     def laad_model_regression(self):
         models = [self.best_knn_regression,self.best_mlr,self.best_decisiontree_regr]
-        r2 = 0
+        rmse = 100000000
         best_model = None
         for model in models:
-            if model.error_test.r2 > r2:
-                r2 = model.error_test.r2
+            if model.error_test.rmse < rmse:
+                rmse = model.error_test.rmse
                 best_model = model
         self.root.huidig_model = best_model
         self.root.label_parameter.config(text=best_model.show_summary_label())

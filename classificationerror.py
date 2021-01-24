@@ -13,30 +13,37 @@ class ErrorClassification:
         self.actual = actual
         self.predicted = predicted
         self.conf_matrix = confusion_matrix(self.actual, self.predicted)
-        # self.summary = self.show_summary()
         self.accuracy = self.show_accuracy()    
+        self.recall = self.show_recall()
+        self.error = round((1 - self.accuracy),2)
+        self.precision = self.show_precision()
     
     def showConfusionMatrix(self):
         sn.heatmap(self.conf_matrix, annot=True)
         plt.plot( label="Accuracy")
         plt.plot( label="Error")
+        plt.figtext(0,0,'Accuracy: {}\nError: {}\nRecall: {}\nPrecision: {}'.format(self.accuracy,
+                                                                                    self.error,
+                                                                                    self.recall,
+                                                                                    self.precision))
         plt.title('Confusion Matrix')
         plt.show()
         return None
 
-    # def show_summary(self):
-    #     accuracy = round((accuracy_score(self.actual, self.predicted) * 100),2)
-    #     error = 100-accuracy
-    #     precision = round((precision_score(self.actual, self.predicted) * 100),2)
-    #     recall = round((recall_score(self.actual, self.predicted) * 100),2)
-    #     f1 = round((f1_score(self.actual, self.predicted) * 100),2)
-    #     return 'Accuracy: {}%\nError: {}%\nprecision: {}%\nrecall: {}%\nfscore: {}'.format(accuracy,error,precision,recall,f1)
-
     def show_accuracy(self):
         """ Geeft de accuracy terug
         """
-        # accuracy = round((accuracy_score(self.actual, self.predicted) * 100),2)
-        # return str(accuracy)+'%'
         return round(accuracy_score(self.actual, self.predicted),2)
+    
+    def show_recall(self):
+        """ Geeft de recall score terug """
+        return round((recall_score(self.actual, self.predicted)*100),2)
+
+    def show_precision(self):
+        """ Geeft de precision score terug """
+        return round(f1_score(self.actual, self.predicted),2)
+    
+
+
 
 

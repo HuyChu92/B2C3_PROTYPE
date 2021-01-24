@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt
 from classificationerror import  ErrorClassification
 from regressionerror import ErrorRegression
 from sklearn.preprocessing import StandardScaler, MinMaxScaler
+import tkinter
 
 class Model:
     """ Class model
@@ -38,8 +39,15 @@ class Model:
         if self.soort == 'Classification':
             label = "Model: {}\nAccuracy: {}\nScaling: {}".format(self.naam,str(self.error_test.accuracy),self.scaling)
         else:
-            label = "Model: {}\nR2: {}\nScaling: {}".format(self.naam,str(self.error_test.r2),self.scaling)
+            label = "Model: {}\nRMSE: {}\nR2: {}\nSSE: {}\nScaling: {}".format(self.naam,str(self.error_test.rmse),self.error_test.r2,self.error_test.sse,self.scaling)
         return label
+    
+    def show_extensive_summary(self):
+        if self.soort == 'Classification':
+            self.error_test.showConfusionMatrix()
+        else:
+            self.error_test.show_boxplot()
+
         
     def split_data(self):
         """ Split de trainingsdata o.b.v. type scaling en trainingspercentage
@@ -52,21 +60,31 @@ class Model:
         self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(self.X,self.y,test_size=percentage)
         return None
 
-    def maak_model(self,k=5):
+    def maak_model(self,k=5): 
         """ Maakt een model aan op basis van meegegeven techniek
         """
-        self.split_data()
+        # self.split_data()
         if self.naam == 'KNN Classification':
+            self.X = pd.DataFrame(MinMaxScaler().fit_transform(self.X))
+            percentage = int(self.train_percentage.replace('%','')) / 100
+            self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(self.X,self.y,test_size=percentage)
             self.model = KNeighborsClassifier(n_neighbors=k)
         elif self.naam == 'KNN Regression':
+            self.X = pd.DataFrame(MinMaxScaler().fit_transform(self.X))
+            percentage = int(self.train_percentage.replace('%','')) / 100
+            self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(self.X,self.y,test_size=percentage)
             self.model = KNeighborsRegressor(n_neighbors=k)
         elif self.naam == 'Logistic Regression':
+            self.split_data()
             self.model = LogisticRegression()
         elif self.naam == 'MLR':
+            self.split_data()
             self.model = LinearRegression()
         elif self.naam == 'Decision Tree Regression':
-            self.model = DecisionTreeRegressor()
+            self.split_data()
+            self.model = DecisionTreeRegressor(max_leaf_nodes=k)
         else:
+            self.split_data()
             self.model = tree.DecisionTreeClassifier()
 
         self.model.fit(self.X_train, self.y_train)
