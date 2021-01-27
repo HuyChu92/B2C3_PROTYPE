@@ -15,6 +15,7 @@ class Voorspel:
         # self.values = []
 
     def voorspel_venster(self):
+        """ Toont een venster waar de gebruiker voorspellingen kan doen"""
         window = Toplevel(self.root)
         window.title('Predict')
         window.grab_set()
@@ -43,6 +44,7 @@ class Voorspel:
         
 
     def show_answer(self,values):
+        """ Geeft de uitkomst van de voorspellingen nadat de gebruiker de velden heeft ingevuld"""
         values_converted = []
         for entry in values:
             new = int(entry.get())

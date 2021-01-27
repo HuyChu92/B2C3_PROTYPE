@@ -67,6 +67,7 @@ class Bestmodel:
         extensive_summary.place(relx=0,rely=0)
     
     def extensive_summary_model(self,tree):
+        """ Laat een uitgebreide error summary zien als de gebruiker op de knop drukt"""
         curItem = tree.focus()
         lijst = tree.item(curItem)
         if lijst['values'][0] == 'KNN Classification':
@@ -272,6 +273,7 @@ class Bestmodel:
             window.insert("", "end", values=row)
 
     def laad_model_classification(self):
+        """ Laad een classification model in op basis van selectie""" 
         models = [self.best_knn_classification,self.best_logistic,self.best_decisiontree_class]
         acc = 0
         best_model = None
@@ -286,6 +288,7 @@ class Bestmodel:
         return messagebox.showinfo('Gelukt','Beste model op basis van ingevoerde variabelen:\n{}'.format(best_model.show_summary_label()))
 
     def laad_model_regression(self):
+        """ Laad een regression model in op basis van selectie""" 
         models = [self.best_knn_regression,self.best_mlr,self.best_decisiontree_regr]
         rmse = 100000000
         best_model = None

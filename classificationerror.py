@@ -19,6 +19,8 @@ class ErrorClassification:
         self.precision = self.show_precision()
     
     def showConfusionMatrix(self):
+        """  Laat een confussion matrix zien van de actual en predicted
+             en de daarbij behorende presision en recall""" 
         sn.heatmap(self.conf_matrix, annot=True)
         plt.plot( label="Accuracy")
         plt.plot( label="Error")

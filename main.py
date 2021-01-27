@@ -29,7 +29,11 @@ class Mainframe(tk.Tk):
         self.frame.pack() # make new frame
 
     def start(self):
+<<<<<<< HEAD
         """ Keert terug naar startscherm als er op start gedrukt wordt"""
+=======
+        """ Roept de startframe weer nadat er op terug word geklikt """
+>>>>>>> 0581559a9867a687830afcc8b8b6092054fae317
         self.frame.pack_forget() # delete currrent frame
         self.frame = Start(self)
         self.frame.pack() # make new frame
