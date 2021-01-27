@@ -45,7 +45,7 @@ class Classification(tk.Frame):
         self.tool_label = tk.LabelFrame(self, text="Selecteer wat u wilt doen")
         self.tool_label.place(height=400, width=290, rely=0, relx=0.63)
 
-        self.parameter_frame = tk.LabelFrame(self, text="Parameters")
+        self.parameter_frame = tk.LabelFrame(self, text="Huidig model:")
         self.parameter_frame.place(height=150, width=250, rely=0.68, relx=0)
 
         self.label_bestand = tk.Label(self.parameter_frame,text=self.master.file)

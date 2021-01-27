@@ -61,7 +61,7 @@ class Bestmodel:
         select_best_model.place(height=100, width=600, rely=0.8, relx=0)
 
         laad_button = Button(select_best_model,text='Laad model',command=lambda: self.model_laden(tv1,window))
-        laad_button.place(relx=0.9,rely=0)
+        laad_button.place(relx=0.85,rely=0)
 
         extensive_summary = Button(select_best_model,text='Extensive Summary',command=lambda: self.extensive_summary_model(tv1))
         extensive_summary.place(relx=0,rely=0)
