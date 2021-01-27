@@ -43,6 +43,7 @@ class Model:
         return label
     
     def show_extensive_summary(self):
+        """ Laat een uitgebreide summary zien van de errors o.b.v. classification of regression"""
         if self.soort == 'Classification':
             self.error_test.showConfusionMatrix()
         else:

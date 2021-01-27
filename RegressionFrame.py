@@ -16,7 +16,7 @@ from geavanceerdframe import Geavanceerd
 
 
 class Regression(tk.Frame):
-    """
+    """ Regression class
     """
     def __init__(self, master, **kwargs):
         tk.Frame.__init__(self, master, **kwargs)

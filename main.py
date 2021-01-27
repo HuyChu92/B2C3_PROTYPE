@@ -29,6 +29,7 @@ class Mainframe(tk.Tk):
         self.frame.pack() # make new frame
 
     def start(self):
+        """ Roept de startframe weer nadat er op terug word geklikt """
         self.frame.pack_forget() # delete currrent frame
         self.frame = Start(self)
         self.frame.pack() # make new frame

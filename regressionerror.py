@@ -15,26 +15,32 @@ class ErrorRegression:
         self.sse = self.sseBerekenen()
         
     def rootsquaredBerekenen(self):
+        """ Geeft r2 terug"""
         rootsquared = round(r2_score(self.actual,self.predicted),2)
         return rootsquared
 
     def rmseBerekenen(self):
+        """ Geeft rmse terug"""
         rmse = mean_squared_error(self.actual, self.predicted, squared=False)
         return round(rmse,2)
     
     def sseBerekenen(self):
+        """ Geeft sse terug"""
         uitkomst = []
         for num in self.residuals:
             uitkomst.append(num*num)
         return sum(uitkomst)
 
     def calculate_residuals(self):
+        """ Berekent residuals o.b.v. actual en predicted"""
         verschil = []
         for i, waarde in enumerate(self.actual):
             verschil.append(abs(waarde - self.predicted[i]))
         return verschil
         
     def show_boxplot(self):
+        """ Laat een weergave van een Boxplot van de residuals met de bijbehorende
+            mean, median, min value en max value"""
         mean = np.round(np.mean(self.residuals), 2)
         median = np.round(np.median(self.residuals), 2)
         min_value = round(min(self.residuals))
